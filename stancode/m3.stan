@@ -39,6 +39,7 @@ transformed parameters{
   vector[N] mu_s;
   vector[N] mu_a;
   vector[N] S_merge;
+  vector[N] log_S_merge;
   for(i in 1:N){
     mu_a[i] = b0 + b1[B[i]] + b2[P[i]];
   }
@@ -46,6 +47,7 @@ transformed parameters{
     mu_s[i] = a0 + a1*cos(rad_angle(A[i]-10));
   }
   S_merge = merge_missing(S_missidx, to_vector(S), S_impute);
+  log_S_merge = log(130 - S_merge);
 }
 
 model{
@@ -57,7 +59,7 @@ model{
   a0 ~ normal(10,1);
   a1 ~ normal(-5,1);
   A ~ normal(mu_a, sigma_a);
-  log(130 - S_merge) ~ normal(mu_s, sigma_s);
+  log_S_merge ~ normal(mu_s, sigma_s);
 }
 
 
