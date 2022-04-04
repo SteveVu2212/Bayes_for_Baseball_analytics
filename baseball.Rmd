@@ -185,7 +185,7 @@ for(i in 1:100){
 
 
 ```{r}
-plot(NULL,xlim=c(-40,60), ylim=c(min(prior_speed),max(prior_speed)+1),
+plot(NULL,xlim=c(-40,60), ylim=c(min(prior_speed),max(prior_speed)),
      xlab="launch angle", ylab="log (130-speed)")
 for(i in 1:50){
   lines(grid_angle, prior_speed[i,])
@@ -205,7 +205,7 @@ dat1 <- list(S = df_train1$speed, A = df_train1$vangle, B = df_train1$batter, P 
 
 
 ```{r}
-m1 <- cmdstan_model("stancode/m3.stan")
+m1 <- cmdstan_model("stancode/m1.stan")
 fit1 <- m1$sample(data=dat1, chains=2, parallel_chains=getOption("mc.core",2))
 summary1 <- as.data.frame(fit1$summary(c("a0", "a1", "b0")))
 summary1
@@ -220,17 +220,17 @@ One of the main part in Bayesian approach is to run posterior predictive checks 
 Here, we are able to construct a whole distribution of each parameter. We are going to draw 50 prediction lines
 
 ```{r}
-draws3 <- fit3$draws()
+draws1 <- fit1$draws()
 ```
 
 
 ```{r}
 sample_angle <- seq(from=-40,to=60,length.out=100)
-mu3 <- matrix(0,nrow=2000,ncol=100)
-a0 <- extract_variable(draws3, sprintf("a0"))
-a1 <- extract_variable(draws3, sprintf("a1"))
+predicted_speed1 <- matrix(0,nrow=2000,ncol=100)
+a0 <- extract_variable(draws1, sprintf("a0"))
+a1 <- extract_variable(draws1, sprintf("a1"))
 for(i in 1:100){
-  mu3[,i] = a0 + a1*cos(rad(sample_angle[i]-10))
+  predicted_speed1[,i] = a0 + a1*cos(rad(sample_angle[i]-10))
 }
 ```
 
@@ -240,7 +240,7 @@ At the beginning, the posterior prediction lines are very good as the prior and 
 plot(NULL,xlim=c(-40,60),ylim=c(3,5),
      xlab="launch angle", ylab="exit speed")
 for(i in 1:50){
-  lines(sample_angle, mu3[i,], lwd=1)
+  lines(sample_angle, predicted_speed1[i,], lwd=1)
 }
 
 points(df_train1$vangle, log(130-df_train1$speed), col=4, cex=0.3, pch=20)
@@ -284,31 +284,31 @@ $$
 When fitting the model, D.s and D.a are set at 1. That means we expect the observed value is within 1 standard deviation from its mean value. We can definitely improve the assumption with more information about the two systems
 
 ```{r}
-dat4 <- list(S_obs = df_train1$speed, A_obs = df_train1$vangle, B = df_train1$batter, 
+dat2 <- list(S_obs = df_train1$speed, A_obs = df_train1$vangle, B = df_train1$batter, 
              P = df_train1$pitcher, Ds = 1, Da = 1,N = dim(df_train1)[1], 
              NB = length(unique(df_train1$batter)), NP = length(unique(df_train1$pitcher)))
 ```
 
 
 ```{r}
-m4 <- cmdstan_model("stancode/m4.stan")
-fit4 <- m4$sample(data=dat4, chains=2, parallel_chains=getOption("mc.core",2))
-summary4 <- as.data.frame(fit4$summary(c("a0", "a1", "b0")))
-summary4
+m2 <- cmdstan_model("stancode/m2.stan")
+fit2 <- m2$sample(data=dat2, chains=2, parallel_chains=getOption("mc.core",2))
+summary2 <- as.data.frame(fit2$summary(c("a0", "a1", "b0")))
+summary2
 ```
 
 After fitting the model, we do a quick diagnosis as we did in the preceding part. Our new rhats are approximately at 1 while the number of effective samples are large
 
 ```{r}
-draws4 <- fit4$draws()
+draws2 <- fit2$draws()
 ```
 
 
 ```{r}
 sample_angle <- seq(from=-40,to=60,length.out=100)
 predicted_speed2 <- matrix(0,nrow=2000,ncol=100)
-a0 <- extract_variable(draws4, sprintf("a0"))
-a1 <- extract_variable(draws4, sprintf("a1"))
+a0 <- extract_variable(draws2, sprintf("a0"))
+a1 <- extract_variable(draws2, sprintf("a1"))
 for(i in 1:100){
   predicted_speed2[,i] = a0 + a1*cos(rad(sample_angle[i]-10))
 }
@@ -381,7 +381,7 @@ At first glance, the model looks identical to the very first model we build up. 
 
 
 ```{r}
-dat5 <- list(S = ifelse(is.na(df_train2$speed),0,df_train2$speed), A = df_train2$vangle, 
+dat3 <- list(S = ifelse(is.na(df_train2$speed),0,df_train2$speed), A = df_train2$vangle, 
              B = df_train2$batter, P = df_train2$pitcher, N = dim(df_train2)[1], 
              NB = length(unique(df_train2$batter)), NP = length(unique(df_train2$pitcher)),  
              S_miss = sum(apply(df_train2, 1, anyNA)), 
@@ -390,23 +390,23 @@ dat5 <- list(S = ifelse(is.na(df_train2$speed),0,df_train2$speed), A = df_train2
 
 
 ```{r}
-m5 <- cmdstan_model("stancode/m5.stan")
-fit5 <- m5$sample(data=dat5, chains=2, parallel_chains=getOption("mc.core",2))
-summary5 <- as.data.frame(fit5$summary(c("a0", "a1", "b0")))
-summary5
+m3 <- cmdstan_model("stancode/m3.stan")
+fit3 <- m3$sample(data=dat3, chains=2, parallel_chains=getOption("mc.core",2))
+summary3 <- as.data.frame(fit3$summary(c("a0", "a1", "b0")))
+summary3
 ```
 
 
 ```{r}
-draws5 <- fit5$draws()
+draws3 <- fit3$draws()
 ```
 
 We are able to extract a full list of speed values that include both observed and inferred values
 
 ```{r}
-S_merge <- matrix(0,2000,dat5$N)
-for(i in 1:dat5$N){
-  S_merge[,i] <- extract_variable(draws5, variable = sprintf("S_merge[%d]",i))
+S_merge <- matrix(0,2000,dat3$N)
+for(i in 1:dat3$N){
+  S_merge[,i] <- extract_variable(draws3, variable = sprintf("S_merge[%d]",i))
 }
 mean_S_merge <- apply(S_merge, 2, mean)
 ```
@@ -415,8 +415,8 @@ mean_S_merge <- apply(S_merge, 2, mean)
 ```{r}
 sample_angle <- seq(from=-40,to=60,length.out=100)
 predicted_speed3 <- matrix(0,nrow=2000,ncol=100)
-a0 <- extract_variable(draws5, sprintf("a0"))
-a1 <- extract_variable(draws5, sprintf("a1"))
+a0 <- extract_variable(draws3, sprintf("a0"))
+a1 <- extract_variable(draws3, sprintf("a1"))
 for(i in 1:100){
   predicted_speed3[,i] = a0 + a1*cos(rad(sample_angle[i]-10))
 }
@@ -451,7 +451,7 @@ A_{true} \sim N(\mu_{a},\sigma_{a})\\
 $$
 
 ```{r}
-dat6 <- list(S_obs = ifelse(is.na(df_train2$speed),0,df_train2$speed), A_obs = df_train2$vangle, 
+dat4 <- list(S_obs = ifelse(is.na(df_train2$speed),0,df_train2$speed), A_obs = df_train2$vangle, 
              B = df_train2$batter, P = df_train2$pitcher, Ds = 1, Da = 1, 
              NB = length(unique(df_train2$batter)), NP = length(unique(df_train2$pitcher)),
              N = dim(df_train2)[1], NB = length(unique(df_train2$batter)), NP = length(unique(df_train2$pitcher)),
@@ -460,31 +460,31 @@ dat6 <- list(S_obs = ifelse(is.na(df_train2$speed),0,df_train2$speed), A_obs = d
 
 
 ```{r}
-m6 <- cmdstan_model("stancode/m6.stan")
-fit6 <- m6$sample(data=dat6, chains=2, parallel_chains=getOption("mc.core",2))
-summary6 <- as.data.frame(fit6$summary(c("a0", "a1", "b0")))
-summary6
+m4 <- cmdstan_model("stancode/m4.stan")
+fit4 <- m4$sample(data=dat4, chains=2, parallel_chains=getOption("mc.core",2))
+summary4 <- as.data.frame(fit4$summary(c("a0", "a1", "b0")))
+summary4
 ```
 
 ```{r}
-draws6 <- fit6$draws()
+draws4 <- fit4$draws()
 ```
 
 
 ```{r}
 sample_angle <- seq(from=-40,to=60,length.out=100)
 predicted_speed4 <- matrix(0,nrow=2000,ncol=100)
-a0 <- extract_variable(draws6, sprintf("a0"))
-a1 <- extract_variable(draws6, sprintf("a1"))
+a0 <- extract_variable(draws4, sprintf("a0"))
+a1 <- extract_variable(draws4, sprintf("a1"))
 for(i in 1:100){
   predicted_speed4[,i] = a0 + a1*cos(rad(sample_angle[i]-10))
 }
 ```
 
 ```{r}
-S_merge <- matrix(0,2000,dat6$N)
-for(i in 1:dat5$N){
-  S_merge[,i] <- extract_variable(draws6, variable = sprintf("S_merge[%d]",i))
+S_merge <- matrix(0,2000,dat4$N)
+for(i in 1:dat4$N){
+  S_merge[,i] <- extract_variable(draws4, variable = sprintf("S_merge[%d]",i))
 }
 mean_S_merge <- apply(S_merge, 2, mean)
 ```
@@ -508,99 +508,71 @@ We implement two tests. Firstly, we choose next 3000 samples that are not used f
 ## First testing case
 
 ```{r}
-df_test <- df[3001:6000,]
+df_test1 <- df[3001:6000,]
+```
+
+```{r}
+sprintf('the percentage of missing value from system A is %s', round(mean(is.na(df_test1$speed_A)),2))
+sprintf('the percentage of missing value from system A is %s', round(mean(is.na(df_test1$speed_B)),2))
+```
+
+```{r}
+df_test1 <- processing_data(df_test1)
 ```
 
 
 ```{r}
-sprintf('the percentage of missing value from system A is %s', round(mean(is.na(df_test$speed_A)),2))
-sprintf('the percentage of missing value from system A is %s', round(mean(is.na(df_test$speed_B)),2))
-```
-
-```{r}
-df_test <- processing_data(df_test)
-```
-
-
-```{r}
-predicted_speed <- matrix(0,nrow=2000,ncol=length(df_test$vangle))
-a0 <- extract_variable(draws6, sprintf("a0"))
-a1 <- extract_variable(draws6, sprintf("a1"))
-for(i in 1:length(df_test$vangle)){
-  predicted_speed[,i] = a0 + a1*cos(rad(df_test$vangle[i]-10))
+predicted_speed_test1 <- matrix(0,nrow=2000,ncol=length(df_test1$vangle))
+a0 <- extract_variable(draws4, sprintf("a0"))
+a1 <- extract_variable(draws4, sprintf("a1"))
+for(i in 1:length(df_test1$vangle)){
+  predicted_speed_test1[,i] = a0 + a1*cos(rad(df_test1$vangle[i]-10))
 }
-```
-
-
-```{r}
-mean_predicted_speed <- apply(predicted_speed,2,mean)
+mean_predicted_speed <- apply(predicted_speed_test1,2,mean)
 ```
 
 ```{r}
-S_missidx = unique(which(is.na(df_test), arr.ind=TRUE)[,1])
-```
-
-```{r}
-mse <- mean(sqrt((mean_predicted_speed[-S_missidx] - log(130-df_test$speed[-S_missidx]))^2))
+S_missidx = unique(which(is.na(df_test1), arr.ind=TRUE)[,1])
+mse <- mean(sqrt((mean_predicted_speed[-S_missidx] - log(130-df_test1$speed[-S_missidx]))^2))
 sprintf('The mean square error is %s', mse)
 ```
 
-## Second testing cases
+## Second testing case
 
 ```{r}
 hitter_393 <- df[df$batter==393,]
-```
-
-```{r}
 hitter_393 <- processing_data(hitter_393)
 ```
 
 
 ```{r}
 predicted_speed_393 <- matrix(0,nrow=2000,ncol=length(hitter_393$vangle))
-a0 <- extract_variable(draws6, sprintf("a0"))
-a1 <- extract_variable(draws6, sprintf("a1"))
+a0 <- extract_variable(draws4, sprintf("a0"))
+a1 <- extract_variable(draws4, sprintf("a1"))
 for(i in 1:length(hitter_393$vangle)){
   predicted_speed_393[,i] = a0 + a1*cos(rad(hitter_393$vangle[i]-10))
 }
-```
-
-
-```{r}
 mean_predicted_speed_393 <- apply(predicted_speed_393,2,mean)
 ```
 
 ```{r}
 S_missidx = unique(which(is.na(hitter_393), arr.ind=TRUE)[,1])
+mse <- mean((mean_predicted_speed_393[-S_missidx] - log(130-hitter_393$speed[-S_missidx]))^2)
+sprintf('The mean square error is %s', mse)
 ```
 
 
 ```{r}
-plot(hitter_393$vangle[-S_missidx], log(130-hitter_393$speed[-S_missidx]))
-points(hitter_393$vangle[-S_missidx], mean_predicted_speed_393[-S_missidx], col=4, cex=1)
+plot(NULL, xlim=c(-40,60), ylim=c(3,4.5), 
+     xlab="launch angle", ylab="exit velocity",
+     main="performance of hitter #393")
+points(hitter_393$vangle[-S_missidx], log(130-hitter_393$speed[-S_missidx]), cex=0.7, pch=20)
+points(hitter_393$vangle[-S_missidx], mean_predicted_speed_393[-S_missidx], col=4, cex=1, pch=20)
+legend("bottomleft", c("observe", "predict"), col=c(1,4), bty='n', pch=20)
 ```
 
 
 ```{r}
-mean((mean_predicted_speed_393[-S_missidx] - log(130-hitter_393$speed[-S_missidx]))^2)
 ```
-
-
-```{r}
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
