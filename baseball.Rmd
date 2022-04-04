@@ -177,7 +177,8 @@ $$
 
 ### Define priors
 
-Here, we use Normal(0,25) as a prior for $\beta_{0}$ and Normal(0,10) as priors for $\beta_{Batter},\beta_{Pitcher}$
+Here, we use Normal(0,25) as a prior for $\beta_{0}$ and Normal(0,10) as priors 
+for $\beta_{Batter},\beta_{Pitcher}$
 
 The prior predictive check shows that the launch angle is normally distributed at 0
 
@@ -228,8 +229,9 @@ To fit a model in Stan, we need to make a list of data input for the model. The 
 the model is included in the stan code file
 
 ```{r}
-dat1 <- list(S = df_train1$speed, A = df_train1$vangle, B = df_train1$batter, P = df_train1$pitcher,
-             N = dim(df_train1)[1], NB = length(unique(df_train1$batter)), NP = length(unique(df_train1$pitcher)))
+dat1 <- list(S = df_train1$speed, A = df_train1$vangle, B = df_train1$batter, 
+             P = df_train1$pitcher, N = dim(df_train1)[1], 
+             NB = length(unique(df_train1$batter)), NP = length(unique(df_train1$pitcher)))
 ```
 
 
@@ -513,8 +515,9 @@ $$
 dat4 <- list(S_obs = ifelse(is.na(df_train2$speed),0,df_train2$speed), A_obs = df_train2$vangle, 
              B = df_train2$batter, P = df_train2$pitcher, Ds = 1, Da = 1, 
              NB = length(unique(df_train2$batter)), NP = length(unique(df_train2$pitcher)),
-             N = dim(df_train2)[1], NB = length(unique(df_train2$batter)), NP = length(unique(df_train2$pitcher)),
-             S_miss = sum(apply(df_train2, 1, anyNA)), S_missidx = unique(which(is.na(df_train2), arr.ind=TRUE)[,1]))
+             N = dim(df_train2)[1], NB = length(unique(df_train2$batter)), 
+             NP = length(unique(df_train2$pitcher)), S_miss = sum(apply(df_train2, 1, anyNA)), 
+             S_missidx = unique(which(is.na(df_train2), arr.ind=TRUE)[,1]))
 ```
 
 
