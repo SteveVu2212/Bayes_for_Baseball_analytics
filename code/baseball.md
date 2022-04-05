@@ -37,7 +37,7 @@ for each batter in the following season. The project is written in Stan
 and implements a full Bayesian approach
 
 ``` r
-path = '/Users/mac/Documents/14. Causal Inference/Bayesian Data Analysis/Projects/baseball/Bayes_for_Baseball_analytics/'
+path = '...'
 ```
 
 ``` r
@@ -161,7 +161,7 @@ Inheriting from the work of Scott Powers in 2016, we can see that the
 current data set shows us a signal of connection between launch angle
 and exit velocity as follows
 
-log (130−*S*) ≈ *α*<sub>0</sub> + *α*<sub>1</sub>cos (*r**a**d**i**a**n*(*A*−10))
+[](https://github.com/SteveVu2212/Bayes_for_Baseball_analytics/blob/main/figs/log_speed.png)
 
 ``` r
 grid_angle <- seq(from=-40,to=60,length.out=100)
@@ -198,17 +198,7 @@ up missing data
 
 The chooses of priors for alpha and beta are explained belows
 
-$$
-\\log(130-S) \\sim N(\\mu\_{s},\\sigma\_{s})\\\\
-\\mu\_{s} = \\alpha\_{0} + \\alpha\_{1} \\cos(rad(A - 10))\\\\
-A \\sim N(\\mu\_{a},\\sigma\_{a})\\\\
-\\mu\_{a} = \\beta\_{0} + \\beta\_{Batter} + \\beta\_{Pitcher}\\\\
-\\beta\_{0} \\sim N(0,25)\\\\
-\\beta\_{Batter}, \\beta\_{Pitcher} \\sim N(0,1)\\\\
-\\alpha\_{0} \\sim N(10,1)\\\\
-\\alpha\_{1} \\sim N(-5,1)\\\\
-\\sigma\_{s}, \\sigma\_{a} \\sim \\exp(1)
-$$
+[](https://github.com/SteveVu2212/Bayes_for_Baseball_analytics/blob/main/figs/m13.png)
 
 ### Define priors
 
@@ -235,7 +225,7 @@ uniformly sample a list of launch angles from -40 to 60. Given the
 samples, we can generate prior predictives for exit velocity through the
 formula
 
-log (130−*S*) ≈ *α*<sub>0</sub> + *α*<sub>1</sub>cos (*r**a**d**i**a**n*(*A*−10))
+[](https://github.com/SteveVu2212/Bayes_for_Baseball_analytics/blob/main/figs/log_speed.png)
 
 ``` r
 grid_angle <- seq(from=-40,to=60,length.out=100)
@@ -276,59 +266,6 @@ dat1 <- list(S = df_train1$speed, A = df_train1$vangle, B = df_train1$batter,
 m1 <- cmdstan_model("stancode/m1.stan")
 fit1 <- m1$sample(data=dat1, chains=2, parallel_chains=getOption("mc.core",2))
 ```
-
-    ## Running MCMC with 2 parallel chains...
-    ## 
-    ## Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) 
-    ## Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) 
-    ## Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
-    ## Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) 
-    ## Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
-    ## Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
-    ## Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
-    ## Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) 
-    ## Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
-    ## Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) 
-    ## Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) 
-    ## Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) 
-    ## Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) 
-    ## Chain 1 Iteration:  600 / 2000 [ 30%]  (Warmup) 
-    ## Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) 
-    ## Chain 1 Iteration:  700 / 2000 [ 35%]  (Warmup) 
-    ## Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) 
-    ## Chain 1 Iteration:  800 / 2000 [ 40%]  (Warmup) 
-    ## Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) 
-    ## Chain 1 Iteration:  900 / 2000 [ 45%]  (Warmup) 
-    ## Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
-    ## Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
-    ## Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
-    ## Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
-    ## Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
-    ## Chain 1 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
-    ## Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
-    ## Chain 1 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
-    ## Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
-    ## Chain 1 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
-    ## Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
-    ## Chain 1 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
-    ## Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
-    ## Chain 1 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
-    ## Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
-    ## Chain 1 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
-    ## Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
-    ## Chain 1 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
-    ## Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
-    ## Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
-    ## Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
-    ## Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
-    ## Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
-    ## Chain 2 finished in 95.9 seconds.
-    ## Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
-    ## Chain 1 finished in 98.2 seconds.
-    ## 
-    ## Both chains finished successfully.
-    ## Mean chain execution time: 97.0 seconds.
-    ## Total execution time: 98.5 seconds.
 
 ``` r
 summary1 <- as.data.frame(fit1$summary(c("a0", "a1", "b0")))
@@ -427,19 +364,7 @@ two variables and infer their value from the observational data. That
 will cost extra computational power, but we gain a full distribution of
 the true value
 
-$$
-S\_{obs} \\sim N(S\_{true},D\_{s})\\\\
-\\log(130-S\_{true}) \\sim N(\\mu\_{s},\\sigma\_{s})\\\\
-\\mu\_{s} = \\alpha\_{0} + \\alpha\_{1} \\cos(rad(A\_{true} - 10))\\\\
-A\_{obs} \\sim N(A\_{true},D\_{a}) \\\\
-A\_{true} \\sim N(\\mu\_{a},\\sigma\_{a})\\\\
-\\mu\_{a} = \\beta\_{0} + \\beta\_{Batter} + \\beta\_{Pitcher}\\\\
-\\beta\_{0} \\sim N(0,25)\\\\
-\\beta\_{Batter}, \\beta\_{Pitcher} \\sim N(0,1)\\\\
-\\alpha\_{0} \\sim N(10,1)\\\\
-\\alpha\_{1} \\sim N(-5,1)\\\\
-\\sigma\_{s}, \\sigma\_{a} \\sim \\exp(1)
-$$
+[](https://github.com/SteveVu2212/Bayes_for_Baseball_analytics/blob/main/figs/m24.png)
 
 When fitting the model, D.s and D.a are set at 1. That means we expect
 the observed value is within 1 standard deviation from its mean value.
@@ -456,59 +381,6 @@ dat2 <- list(S_obs = df_train1$speed, A_obs = df_train1$vangle, B = df_train1$ba
 m2 <- cmdstan_model("stancode/m2.stan")
 fit2 <- m2$sample(data=dat2, chains=2, parallel_chains=getOption("mc.core",2))
 ```
-
-    ## Running MCMC with 2 parallel chains...
-    ## 
-    ## Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) 
-    ## Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) 
-    ## Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
-    ## Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) 
-    ## Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
-    ## Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
-    ## Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
-    ## Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
-    ## Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) 
-    ## Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) 
-    ## Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) 
-    ## Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) 
-    ## Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) 
-    ## Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) 
-    ## Chain 1 Iteration:  600 / 2000 [ 30%]  (Warmup) 
-    ## Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) 
-    ## Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) 
-    ## Chain 1 Iteration:  700 / 2000 [ 35%]  (Warmup) 
-    ## Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
-    ## Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
-    ## Chain 1 Iteration:  800 / 2000 [ 40%]  (Warmup) 
-    ## Chain 1 Iteration:  900 / 2000 [ 45%]  (Warmup) 
-    ## Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
-    ## Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
-    ## Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
-    ## Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
-    ## Chain 1 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
-    ## Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
-    ## Chain 1 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
-    ## Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
-    ## Chain 1 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
-    ## Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
-    ## Chain 1 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
-    ## Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
-    ## Chain 1 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
-    ## Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
-    ## Chain 1 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
-    ## Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
-    ## Chain 1 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
-    ## Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
-    ## Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
-    ## Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
-    ## Chain 2 finished in 419.0 seconds.
-    ## Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
-    ## Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
-    ## Chain 1 finished in 433.1 seconds.
-    ## 
-    ## Both chains finished successfully.
-    ## Mean chain execution time: 426.1 seconds.
-    ## Total execution time: 433.4 seconds.
 
 ``` r
 summary2 <- as.data.frame(fit2$summary(c("a0", "a1", "b0")))
@@ -604,17 +476,7 @@ df_train2 <- processing_data(df_train2)
 
 ## Models with Bayesian imputation
 
-$$
-\\log(130-S) \\sim N(\\mu\_{s},\\sigma\_{s})\\\\
-\\mu\_{s} = \\alpha\_{0} + \\alpha\_{1} \\cos(rad(A - 10))\\\\
-A \\sim N(\\mu\_{a},\\sigma\_{a})\\\\
-\\mu\_{a} = \\beta\_{0} + \\beta\_{Batter} + \\beta\_{Pitcher}\\\\
-\\beta\_{0} \\sim N(0,25)\\\\
-\\beta\_{Batter}, \\beta\_{Pitcher} \\sim N(0,1)\\\\
-\\alpha\_{0} \\sim N(10,1)\\\\
-\\alpha\_{1} \\sim N(-5,1)\\\\
-\\sigma\_{s}, \\sigma\_{a} \\sim \\exp(1)
-$$
+[](https://github.com/SteveVu2212/Bayes_for_Baseball_analytics/blob/main/figs/m13.png)
 
 At first glance, the model looks identical to the very first model we
 build up. However, it implicitly does Bayesian imputation behind the
@@ -642,59 +504,6 @@ dat3 <- list(S = ifelse(is.na(df_train2$speed),0,df_train2$speed), A = df_train2
 m3 <- cmdstan_model("stancode/m3.stan")
 fit3 <- m3$sample(data=dat3, chains=2, parallel_chains=getOption("mc.core",2))
 ```
-
-    ## Running MCMC with 2 parallel chains...
-    ## 
-    ## Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) 
-    ## Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) 
-    ## Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) 
-    ## Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
-    ## Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
-    ## Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
-    ## Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
-    ## Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) 
-    ## Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
-    ## Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) 
-    ## Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) 
-    ## Chain 1 Iteration:  600 / 2000 [ 30%]  (Warmup) 
-    ## Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) 
-    ## Chain 1 Iteration:  700 / 2000 [ 35%]  (Warmup) 
-    ## Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) 
-    ## Chain 1 Iteration:  800 / 2000 [ 40%]  (Warmup) 
-    ## Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) 
-    ## Chain 1 Iteration:  900 / 2000 [ 45%]  (Warmup) 
-    ## Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) 
-    ## Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
-    ## Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
-    ## Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) 
-    ## Chain 1 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
-    ## Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
-    ## Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
-    ## Chain 1 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
-    ## Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
-    ## Chain 1 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
-    ## Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
-    ## Chain 1 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
-    ## Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
-    ## Chain 1 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
-    ## Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
-    ## Chain 1 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
-    ## Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
-    ## Chain 1 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
-    ## Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
-    ## Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
-    ## Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
-    ## Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
-    ## Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
-    ## Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
-    ## Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
-    ## Chain 1 finished in 150.8 seconds.
-    ## Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
-    ## Chain 2 finished in 155.9 seconds.
-    ## 
-    ## Both chains finished successfully.
-    ## Mean chain execution time: 153.3 seconds.
-    ## Total execution time: 156.2 seconds.
 
 ``` r
 summary3 <- as.data.frame(fit3$summary(c("a0", "a1", "b0")))
@@ -758,19 +567,7 @@ steps. The model below is complicated enough to account for both
 measurement errors and missing data. We infers the true value and the
 missing value simultaneously
 
-$$
-S\_{obs} \\sim N(S\_{true},D\_{s})\\\\
-\\log(130-S\_{true}) \\sim N(\\mu\_{s},\\sigma\_{s})\\\\
-\\mu\_{s} = \\alpha\_{0} + \\alpha\_{1} \\cos(rad(A\_{true} - 10))\\\\
-A\_{obs} \\sim N(A\_{true},D\_{a}) \\\\
-A\_{true} \\sim N(\\mu\_{a},\\sigma\_{a})\\\\
-\\mu\_{a} = \\beta\_{0} + \\beta\_{Batter} + \\beta\_{Pitcher}\\\\
-\\beta\_{0} \\sim N(0,25)\\\\
-\\beta\_{Batter}, \\beta\_{Pitcher} \\sim N(0,1)\\\\
-\\alpha\_{0} \\sim N(10,1)\\\\
-\\alpha\_{1} \\sim N(-5,1)\\\\
-\\sigma\_{s}, \\sigma\_{a} \\sim \\exp(1)
-$$
+[](https://github.com/SteveVu2212/Bayes_for_Baseball_analytics/blob/main/figs/m24.png)
 
 ``` r
 dat4 <- list(S_obs = ifelse(is.na(df_train2$speed),0,df_train2$speed), A_obs = df_train2$vangle, 
@@ -785,59 +582,6 @@ dat4 <- list(S_obs = ifelse(is.na(df_train2$speed),0,df_train2$speed), A_obs = d
 m4 <- cmdstan_model("stancode/m4.stan")
 fit4 <- m4$sample(data=dat4, chains=2, parallel_chains=getOption("mc.core",2))
 ```
-
-    ## Running MCMC with 2 parallel chains...
-    ## 
-    ## Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) 
-    ## Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) 
-    ## Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) 
-    ## Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
-    ## Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
-    ## Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
-    ## Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
-    ## Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
-    ## Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) 
-    ## Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) 
-    ## Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) 
-    ## Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) 
-    ## Chain 1 Iteration:  600 / 2000 [ 30%]  (Warmup) 
-    ## Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) 
-    ## Chain 1 Iteration:  700 / 2000 [ 35%]  (Warmup) 
-    ## Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) 
-    ## Chain 1 Iteration:  800 / 2000 [ 40%]  (Warmup) 
-    ## Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) 
-    ## Chain 1 Iteration:  900 / 2000 [ 45%]  (Warmup) 
-    ## Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) 
-    ## Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
-    ## Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
-    ## Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
-    ## Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
-    ## Chain 1 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
-    ## Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
-    ## Chain 1 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
-    ## Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
-    ## Chain 1 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
-    ## Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
-    ## Chain 1 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
-    ## Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
-    ## Chain 1 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
-    ## Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
-    ## Chain 1 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
-    ## Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
-    ## Chain 1 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
-    ## Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
-    ## Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
-    ## Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
-    ## Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
-    ## Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
-    ## Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
-    ## Chain 1 finished in 246.1 seconds.
-    ## Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
-    ## Chain 2 finished in 248.3 seconds.
-    ## 
-    ## Both chains finished successfully.
-    ## Mean chain execution time: 247.2 seconds.
-    ## Total execution time: 248.6 seconds.
 
 ``` r
 summary4 <- as.data.frame(fit4$summary(c("a0", "a1", "b0")))
