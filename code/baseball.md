@@ -161,7 +161,7 @@ Inheriting from the work of Scott Powers in 2016, we can see that the
 current data set shows us a signal of connection between launch angle
 and exit velocity as follows
 
-[](https://github.com/SteveVu2212/Bayes_for_Baseball_analytics/blob/main/figs/log_speed.png)
+![](https://github.com/SteveVu2212/Bayes_for_Baseball_analytics/blob/main/figs/log_speed.png)
 
 ``` r
 grid_angle <- seq(from=-40,to=60,length.out=100)
@@ -198,7 +198,7 @@ up missing data
 
 The chooses of priors for alpha and beta are explained belows
 
-[](https://github.com/SteveVu2212/Bayes_for_Baseball_analytics/blob/main/figs/m13.png)
+![](https://github.com/SteveVu2212/Bayes_for_Baseball_analytics/blob/main/figs/m13.png)
 
 ### Define priors
 
@@ -225,7 +225,7 @@ uniformly sample a list of launch angles from -40 to 60. Given the
 samples, we can generate prior predictives for exit velocity through the
 formula
 
-[](https://github.com/SteveVu2212/Bayes_for_Baseball_analytics/blob/main/figs/log_speed.png)
+![](https://github.com/SteveVu2212/Bayes_for_Baseball_analytics/blob/main/figs/log_speed.png)
 
 ``` r
 grid_angle <- seq(from=-40,to=60,length.out=100)
@@ -364,7 +364,7 @@ two variables and infer their value from the observational data. That
 will cost extra computational power, but we gain a full distribution of
 the true value
 
-[](https://github.com/SteveVu2212/Bayes_for_Baseball_analytics/blob/main/figs/m24.png)
+![](https://github.com/SteveVu2212/Bayes_for_Baseball_analytics/blob/main/figs/m24.png)
 
 When fitting the model, D.s and D.a are set at 1. That means we expect
 the observed value is within 1 standard deviation from its mean value.
@@ -476,7 +476,7 @@ df_train2 <- processing_data(df_train2)
 
 ## Models with Bayesian imputation
 
-[](https://github.com/SteveVu2212/Bayes_for_Baseball_analytics/blob/main/figs/m13.png)
+![](https://github.com/SteveVu2212/Bayes_for_Baseball_analytics/blob/main/figs/m13.png)
 
 At first glance, the model looks identical to the very first model we
 build up. However, it implicitly does Bayesian imputation behind the
@@ -567,7 +567,7 @@ steps. The model below is complicated enough to account for both
 measurement errors and missing data. We infers the true value and the
 missing value simultaneously
 
-[](https://github.com/SteveVu2212/Bayes_for_Baseball_analytics/blob/main/figs/m24.png)
+![](https://github.com/SteveVu2212/Bayes_for_Baseball_analytics/blob/main/figs/m24.png)
 
 ``` r
 dat4 <- list(S_obs = ifelse(is.na(df_train2$speed),0,df_train2$speed), A_obs = df_train2$vangle, 
