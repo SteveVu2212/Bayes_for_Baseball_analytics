@@ -281,13 +281,13 @@ fit1 <- m1$sample(data=dat1, chains=2, parallel_chains=getOption("mc.core",2))
     ## 
     ## Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) 
     ## Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) 
-    ## Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) 
     ## Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
-    ## Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) 
     ## Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
-    ## Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+    ## Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
     ## Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) 
     ## Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) 
     ## Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) 
@@ -322,27 +322,27 @@ fit1 <- m1$sample(data=dat1, chains=2, parallel_chains=getOption("mc.core",2))
     ## Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
     ## Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
     ## Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
-    ## Chain 2 finished in 104.8 seconds.
+    ## Chain 2 finished in 95.9 seconds.
     ## Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
-    ## Chain 1 finished in 106.8 seconds.
+    ## Chain 1 finished in 98.2 seconds.
     ## 
     ## Both chains finished successfully.
-    ## Mean chain execution time: 105.8 seconds.
-    ## Total execution time: 107.0 seconds.
+    ## Mean chain execution time: 97.0 seconds.
+    ## Total execution time: 98.5 seconds.
 
 ``` r
 summary1 <- as.data.frame(fit1$summary(c("a0", "a1", "b0")))
 summary1
 ```
 
-    ##   variable     mean    median         sd        mad        q5       q95
-    ## 1       a0  5.08073  5.081455 0.05116305 0.05111264  4.998057  5.163796
-    ## 2       a1 -1.41935 -1.419350 0.05485117 0.05478207 -1.507889 -1.328301
-    ## 3       b0 11.60087 11.596600 0.42124989 0.41497974 10.912770 12.317595
+    ##   variable      mean    median         sd        mad        q5       q95
+    ## 1       a0  5.081657  5.082650 0.05370991 0.05407784  4.995040  5.172162
+    ## 2       a1 -1.420474 -1.420395 0.05778641 0.05828101 -1.516218 -1.327730
+    ## 3       b0 11.602578 11.601900 0.40946509 0.41468322 10.913820 12.263920
     ##        rhat ess_bulk ess_tail
-    ## 1 1.0001315 2183.678 1526.684
-    ## 2 0.9998548 2167.410 1469.466
-    ## 3 0.9993345 3619.868 1410.859
+    ## 1 0.9997810 1891.152 1650.868
+    ## 2 0.9997631 1899.757 1684.238
+    ## 3 1.0002064 4048.140 1570.732
 
 There are two common ways to diagnosis the performance of the sampler,
 including rhat and number of effective sample (ess). Without going into
@@ -379,19 +379,20 @@ prior and data do consider every possible prior predictive lines and
 outweight the best fit ones
 
 ``` r
-jpeg(paste0(path,"/figs/m1_postcheck.jpg"), width = 350, height = 350)
+# jpeg(paste0(path,"/figs/m1_postcheck.jpg"), width = 350, height = 350)
 plot(NULL,xlim=c(-40,60),ylim=c(3,5),
      xlab="launch angle", ylab="exit speed")
 for(i in 1:50){
   lines(sample_angle, predicted_speed1[i,], lwd=1)
 }
-
 points(df_train1$vangle, log(130-df_train1$speed), col=4, cex=0.3, pch=20)
-dev.off()
 ```
 
-    ## quartz_off_screen 
-    ##                 2
+![](baseball_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+
+``` r
+# dev.off()
+```
 
 ## An updated model with measurement error
 
@@ -461,42 +462,67 @@ fit2 <- m2$sample(data=dat2, chains=2, parallel_chains=getOption("mc.core",2))
     ## Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) 
     ## Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) 
     ## Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
+    ## Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) 
     ## Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+    ## Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
     ## Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) 
     ## Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) 
     ## Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) 
     ## Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+    ## Chain 1 Iteration:  600 / 2000 [ 30%]  (Warmup) 
     ## Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) 
     ## Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+    ## Chain 1 Iteration:  700 / 2000 [ 35%]  (Warmup) 
     ## Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
     ## Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration:  900 / 2000 [ 45%]  (Warmup) 
     ## Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+    ## Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
     ## Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
     ## Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+    ## Chain 1 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
     ## Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
     ## Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+    ## Chain 1 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
     ## Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
     ## Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+    ## Chain 1 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
     ## Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
     ## Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+    ## Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
-    ## Chain 2 finished in 515.3 seconds.
-    ## The remaining chains had a mean execution time of 515.5 seconds.
+    ## Chain 2 finished in 419.0 seconds.
+    ## Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+    ## Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
+    ## Chain 1 finished in 433.1 seconds.
+    ## 
+    ## Both chains finished successfully.
+    ## Mean chain execution time: 426.1 seconds.
+    ## Total execution time: 433.4 seconds.
 
 ``` r
 summary2 <- as.data.frame(fit2$summary(c("a0", "a1", "b0")))
 summary2
 ```
 
-    ##   variable      mean   median         sd        mad        q5       q95
-    ## 1       a0  5.081724  5.08166 0.05468683 0.05699856  4.994422  5.169524
-    ## 2       a1 -1.419164 -1.41948 0.05858495 0.06215800 -1.512975 -1.327692
-    ## 3       b0 11.592499 11.59255 0.42289651 0.42268926 10.886250 12.298415
-    ##        rhat ess_bulk ess_tail
-    ## 1 1.0008752 1367.057 848.7930
-    ## 2 1.0008476 1343.693 880.2411
-    ## 3 0.9993827 3000.000 988.9748
+    ##   variable      mean    median         sd        mad        q5       q95
+    ## 1       a0  5.084718  5.085990 0.05352337 0.05464122  4.998666  5.172392
+    ## 2       a1 -1.422492 -1.423825 0.05733481 0.05806603 -1.516491 -1.330035
+    ## 3       b0 11.586799 11.589950 0.42445660 0.41712951 10.915180 12.267315
+    ##       rhat ess_bulk ess_tail
+    ## 1 1.001776 1941.348 1450.273
+    ## 2 1.001630 1934.601 1406.973
+    ## 3 1.003083 4427.077 1478.358
 
 After fitting the model, we do a quick diagnosis as we did in the
 preceding part. Our new rhats are approximately at 1 while the number of
@@ -517,19 +543,20 @@ for(i in 1:100){
 ```
 
 ``` r
-jpeg(paste0(path,"/figs/m2_postcheck.jpg"), width = 350, height = 350)
+# jpeg(paste0(path,"/figs/m2_postcheck.jpg"), width = 350, height = 350)
 plot(NULL,xlim=c(-40,60),ylim=c(3,5),
      xlab="launch angle", ylab="exit speed")
 for(i in 1:50){
   lines(sample_angle, predicted_speed2[i,], lwd=1)
 }
-
 points(df_train1$vangle, log(130-df_train1$speed), col=4, cex=0.3, pch=20)
-dev.off()
 ```
 
-    ## quartz_off_screen 
-    ##                 2
+![](baseball_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
+
+``` r
+# dev.off()
+```
 
 # Models with missing data
 
@@ -620,54 +647,54 @@ fit3 <- m3$sample(data=dat3, chains=2, parallel_chains=getOption("mc.core",2))
     ## 
     ## Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) 
     ## Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) 
-    ## Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
     ## Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) 
-    ## Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
-    ## Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+    ## Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
     ## Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
-    ## Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) 
-    ## Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+    ## Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
     ## Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
-    ## Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) 
     ## Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) 
-    ## Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+    ## Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
     ## Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) 
-    ## Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+    ## Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) 
     ## Chain 1 Iteration:  600 / 2000 [ 30%]  (Warmup) 
-    ## Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+    ## Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) 
     ## Chain 1 Iteration:  700 / 2000 [ 35%]  (Warmup) 
-    ## Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
-    ## Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+    ## Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) 
     ## Chain 1 Iteration:  800 / 2000 [ 40%]  (Warmup) 
-    ## Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+    ## Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) 
     ## Chain 1 Iteration:  900 / 2000 [ 45%]  (Warmup) 
-    ## Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+    ## Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) 
     ## Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
     ## Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
-    ## Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+    ## Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) 
     ## Chain 1 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
-    ## Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+    ## Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+    ## Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
     ## Chain 1 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
-    ## Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+    ## Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
     ## Chain 1 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
-    ## Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
     ## Chain 1 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+    ## Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
     ## Chain 1 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
-    ## Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
-    ## Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
     ## Chain 1 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
     ## Chain 1 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
-    ## Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+    ## Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
-    ## Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
-    ## Chain 2 finished in 191.4 seconds.
+    ## Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
     ## Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+    ## Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
-    ## Chain 1 finished in 203.4 seconds.
+    ## Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+    ## Chain 1 finished in 150.8 seconds.
+    ## Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
+    ## Chain 2 finished in 155.9 seconds.
     ## 
     ## Both chains finished successfully.
-    ## Mean chain execution time: 197.4 seconds.
-    ## Total execution time: 203.6 seconds.
+    ## Mean chain execution time: 153.3 seconds.
+    ## Total execution time: 156.2 seconds.
 
 ``` r
 summary3 <- as.data.frame(fit3$summary(c("a0", "a1", "b0")))
@@ -675,13 +702,13 @@ summary3
 ```
 
     ##   variable      mean    median         sd        mad        q5       q95
-    ## 1       a0  5.216068  5.214680 0.05754820 0.05675393  5.122554  5.311648
-    ## 2       a1 -1.553000 -1.551745 0.06176501 0.06168357 -1.656749 -1.452748
-    ## 3       b0 12.188420 12.183250 0.44315486 0.43699635 11.464575 12.947395
-    ##        rhat ess_bulk ess_tail
-    ## 1 1.0031132 1314.610 1558.889
-    ## 2 1.0039225 1325.793 1520.815
-    ## 3 0.9995626 4133.155 1404.860
+    ## 1       a0  5.217047  5.217535 0.05842207 0.05711716  5.121804  5.313523
+    ## 2       a1 -1.554078 -1.554145 0.06253524 0.06069023 -1.656612 -1.452886
+    ## 3       b0 12.171183 12.177400 0.44001450 0.45189648 11.453190 12.893060
+    ##       rhat ess_bulk ess_tail
+    ## 1 1.001611 1034.087 1167.084
+    ## 2 1.001428 1037.896 1142.158
+    ## 3 1.001885 4112.632 1673.118
 
 ``` r
 draws3 <- fit3$draws()
@@ -709,18 +736,20 @@ for(i in 1:100){
 ```
 
 ``` r
-jpeg(paste0(path,"/figs/m3_postcheck.jpg"), width = 350, height = 350)
+# jpeg(paste0(path,"/figs/m3_postcheck.jpg"), width = 350, height = 350)
 plot(NULL,xlim=c(-40,60),ylim=c(3,5),
      xlab="launch angle", ylab="exit speed")
 for(i in 1:50){
   lines(sample_angle, predicted_speed3[i,], lwd=1)
 }
 points(df_train2$vangle, log(130-mean_S_merge), col=4, cex=0.3, pch=20)
-dev.off()
 ```
 
-    ## quartz_off_screen 
-    ##                 2
+![](baseball_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
+
+``` r
+# dev.off()
+```
 
 ## Models with measurement errors and Bayesian imputation
 
@@ -765,41 +794,64 @@ fit4 <- m4$sample(data=dat4, chains=2, parallel_chains=getOption("mc.core",2))
     ## Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
     ## Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
     ## Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+    ## Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) 
     ## Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) 
     ## Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+    ## Chain 1 Iteration:  600 / 2000 [ 30%]  (Warmup) 
     ## Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration:  700 / 2000 [ 35%]  (Warmup) 
     ## Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+    ## Chain 1 Iteration:  800 / 2000 [ 40%]  (Warmup) 
     ## Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration:  900 / 2000 [ 45%]  (Warmup) 
     ## Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+    ## Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
     ## Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
     ## Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
     ## Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+    ## Chain 1 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
     ## Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
     ## Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+    ## Chain 1 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
     ## Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
     ## Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+    ## Chain 1 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
     ## Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
     ## Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+    ## Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
     ## Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+    ## Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
+    ## Chain 1 finished in 246.1 seconds.
     ## Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
-    ## Chain 2 finished in 332.5 seconds.
-    ## The remaining chains had a mean execution time of 332.7 seconds.
+    ## Chain 2 finished in 248.3 seconds.
+    ## 
+    ## Both chains finished successfully.
+    ## Mean chain execution time: 247.2 seconds.
+    ## Total execution time: 248.6 seconds.
 
 ``` r
 summary4 <- as.data.frame(fit4$summary(c("a0", "a1", "b0")))
 summary4
 ```
 
-    ##   variable      mean   median         sd        mad        q5       q95
-    ## 1       a0  5.354898  5.35404 0.04497144 0.04663518  5.278580  5.428535
-    ## 2       a1 -1.702006 -1.70084 0.04821350 0.04852550 -1.780234 -1.621408
-    ## 3       b0 12.162694 12.15220 0.46810669 0.46220055 11.429015 12.939285
-    ##        rhat ess_bulk ess_tail
-    ## 1 1.0002518 1263.522 936.7700
-    ## 2 0.9999893 1273.080 907.7013
-    ## 3 0.9997677 2290.323 872.9888
+    ##   variable      mean    median         sd        mad        q5       q95
+    ## 1       a0  5.356419  5.357090 0.04431343 0.04619782  5.283755  5.428471
+    ## 2       a1 -1.703757 -1.704835 0.04732668 0.04782868 -1.780732 -1.625347
+    ## 3       b0 12.187553 12.192950 0.45746146 0.46716726 11.430440 12.942635
+    ##       rhat ess_bulk ess_tail
+    ## 1 1.000865 2189.130 1679.787
+    ## 2 1.001083 2272.413 1695.153
+    ## 3 1.000511 6602.060 1685.621
 
 ``` r
 draws4 <- fit4$draws()
@@ -824,18 +876,20 @@ mean_S_merge <- apply(S_merge, 2, mean)
 ```
 
 ``` r
-jpeg(paste0(path,"/figs/m4_postcheck.jpg"), width = 350, height = 350)
+# jpeg(paste0(path,"/figs/m4_postcheck.jpg"), width = 350, height = 350)
 plot(NULL,xlim=c(-40,60),ylim=c(3,5),
      xlab="launch angle", ylab="exit speed")
 for(i in 1:50){
   lines(sample_angle, predicted_speed4[i,], lwd=1)
 }
 points(df_train2$vangle, log(130-mean_S_merge), col=4, cex=0.3, pch=20)
-dev.off()
 ```
 
-    ## quartz_off_screen 
-    ##                 2
+![](baseball_files/figure-gfm/unnamed-chunk-44-1.png)<!-- -->
+
+``` r
+# dev.off()
+```
 
 # Testing
 
@@ -893,7 +947,7 @@ mse <- mean(sqrt((mean_predicted_speed[-S_missidx] - log(130-df_test1$speed[-S_m
 sprintf('The mean square error is %s', mse)
 ```
 
-    ## [1] "The mean square error is 0.234993507750789"
+    ## [1] "The mean square error is 0.234994328713695"
 
 ## Second test case
 
@@ -922,18 +976,20 @@ mse <- mean((mean_predicted_speed_393[-S_missidx] - log(130-hitter_393$speed[-S_
 sprintf('The mean square error is %s', mse)
 ```
 
-    ## [1] "The mean square error is 0.0717125798363338"
+    ## [1] "The mean square error is 0.0717084716840919"
 
 ``` r
-jpeg(paste0(path,"figs/hitter393.jpg"), width = 350, height = 350)
+# jpeg(paste0(path,"figs/hitter393.jpg"), width = 350, height = 350)
 plot(NULL, xlim=c(-40,60), ylim=c(3,4.5), 
      xlab="launch angle", ylab="exit velocity",
      main="performance of hitter #393")
 points(hitter_393$vangle[-S_missidx], log(130-hitter_393$speed[-S_missidx]), cex=0.7, pch=20)
 points(hitter_393$vangle[-S_missidx], mean_predicted_speed_393[-S_missidx], col=4, cex=1, pch=20)
 legend("bottomleft", c("observe", "predict"), col=c(1,4), bty='n', pch=20)
-dev.off()
 ```
 
-    ## quartz_off_screen 
-    ##                 2
+![](baseball_files/figure-gfm/unnamed-chunk-53-1.png)<!-- -->
+
+``` r
+# dev.off()
+```
