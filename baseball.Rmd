@@ -173,7 +173,7 @@ $$
 A \sim N(\mu_{a},\sigma_{a})\\
 \mu_{a} = \beta_{0} + \beta_{Batter} + \beta_{Pitcher}\\
 \beta_{0} \sim N(0,25)\\
-\beta_{Batter}, \beta_{Pitcher} \sim N(0,10)\\
+\beta_{Batter}, \beta_{Pitcher} \sim N(0,1)\\
 \alpha_{0} \sim N(10,1)\\
 \alpha_{1} \sim N(-5,1)\\
 \sigma_{s}, \sigma_{a} \sim \exp(1)
@@ -182,13 +182,13 @@ $$
 
 ### Define priors
 
-Here, we use Normal(0,25) as a prior for $\beta_{0}$ and Normal(0,10) as priors 
+Here, we use Normal(0,25) as a prior for $\beta_{0}$ and Normal(0,1) as priors 
 for $\beta_{Batter},\beta_{Pitcher}$
 
 The prior predictive check shows that the launch angle is normally distributed at 0
 
 ```{r}
-prior_angle <- rnorm(1e3,0,25) + rnorm(1e3,0,10)
+prior_angle <- rnorm(1e3,0,25) + rnorm(1e3,0,1)
 plot(NULL, xlim=c(-100,100), ylim=c(0,0.02),
      main='prior predictive check', xlab='angle', ylab='density')
 lines(density(prior_angle), col=2, lwd=2)
@@ -250,10 +250,10 @@ summary1
 
 
 There are two common ways to diagnosis the performance of the sampler, including rhat and 
-number of effective sample (ess). Without going into the details of those two metrics, we 
-can see that as long as rhat approaches 1 and the number of effective sample is close to 
-the sample size of 2000, the sampling algorithm works well and we have credible estimates 
-for the coefficients in the model
+number of effective sample (ess). Without going into the details of those two metrics, as 
+long as rhat approaches 1 and the number of effective sample is close to the sample size 
+of 2000, the sampling algorithm works well and we have credible estimates for the coefficients
+in the model
 
 ### Posterior predictive checks
 
@@ -283,6 +283,7 @@ At the beginning, the posterior prediction lines are very good as the prior and 
 consider every possible prior predictive lines and outweight the best fit ones
 
 ```{r}
+jpeg("figs/m1_postcheck.jpg", width = 350, height = 350)
 plot(NULL,xlim=c(-40,60),ylim=c(3,5),
      xlab="launch angle", ylab="exit speed")
 for(i in 1:50){
@@ -290,6 +291,7 @@ for(i in 1:50){
 }
 
 points(df_train1$vangle, log(130-df_train1$speed), col=4, cex=0.3, pch=20)
+dev.off()
 ```
 
 
@@ -329,7 +331,7 @@ A_{obs} \sim N(A_{true},D_{a}) \\
 A_{true} \sim N(\mu_{a},\sigma_{a})\\
 \mu_{a} = \beta_{0} + \beta_{Batter} + \beta_{Pitcher}\\
 \beta_{0} \sim N(0,25)\\
-\beta_{Batter}, \beta_{Pitcher} \sim N(0,10)\\
+\beta_{Batter}, \beta_{Pitcher} \sim N(0,1)\\
 \alpha_{0} \sim N(10,1)\\
 \alpha_{1} \sim N(-5,1)\\
 \sigma_{s}, \sigma_{a} \sim \exp(1)
@@ -372,6 +374,7 @@ for(i in 1:100){
 ```
 
 ```{r}
+jpeg("figs/m2_postcheck.jpg", width = 350, height = 350)
 plot(NULL,xlim=c(-40,60),ylim=c(3,5),
      xlab="launch angle", ylab="exit speed")
 for(i in 1:50){
@@ -379,6 +382,7 @@ for(i in 1:50){
 }
 
 points(df_train1$vangle, log(130-df_train1$speed), col=4, cex=0.3, pch=20)
+dev.off()
 ```
 
 
@@ -404,15 +408,9 @@ Note that there are a widely accepted classification of batted ball types based 
 * Fly ball: 25-50 degrees
 * Pop up: 50 degrees or higher
 
-**Reconsider the HMM**
-
 Because of the clear boundary range, we are going to replace the missing data of launch angle of 
-each system by the mean value of each ball types. We can make it more complicated by building a hidden 
-markov chain to inversely infer the missing data by cross learning between the hittype and recorded 
-angles. However, we will keep it simple for now
-
-After that, we are free to focus entirely on missing data of speed variable. The imputation for 
-the variable is explained in the next part
+each system by the mean value of each ball types. After that, we are free to focus entirely on 
+missing data of speed variable. The imputation for the variable is explained in the next part
 
 Here, we still weight the data from the two systems and re-assign unique IDs to each batter and pitcher
 
@@ -429,7 +427,7 @@ $$
 A \sim N(\mu_{a},\sigma_{a})\\
 \mu_{a} = \beta_{0} + \beta_{Batter} + \beta_{Pitcher}\\
 \beta_{0} \sim N(0,25)\\
-\beta_{Batter}, \beta_{Pitcher} \sim N(0,10)\\
+\beta_{Batter}, \beta_{Pitcher} \sim N(0,1)\\
 \alpha_{0} \sim N(10,1)\\
 \alpha_{1} \sim N(-5,1)\\
 \sigma_{s}, \sigma_{a} \sim \exp(1)
@@ -491,12 +489,14 @@ for(i in 1:100){
 
 
 ```{r}
+jpeg("figs/m3_postcheck.jpg", width = 350, height = 350)
 plot(NULL,xlim=c(-40,60),ylim=c(3,5),
      xlab="launch angle", ylab="exit speed")
 for(i in 1:50){
   lines(sample_angle, predicted_speed3[i,], lwd=1)
 }
 points(df_train2$vangle, log(130-mean_S_merge), col=4, cex=0.3, pch=20)
+dev.off()
 ```
 
 ## Models with measurement errors and Bayesian imputation
@@ -513,7 +513,7 @@ A_{obs} \sim N(A_{true},D_{a}) \\
 A_{true} \sim N(\mu_{a},\sigma_{a})\\
 \mu_{a} = \beta_{0} + \beta_{Batter} + \beta_{Pitcher}\\
 \beta_{0} \sim N(0,25)\\
-\beta_{Batter}, \beta_{Pitcher} \sim N(0,10)\\
+\beta_{Batter}, \beta_{Pitcher} \sim N(0,1)\\
 \alpha_{0} \sim N(10,1)\\
 \alpha_{1} \sim N(-5,1)\\
 \sigma_{s}, \sigma_{a} \sim \exp(1)
@@ -560,13 +560,14 @@ mean_S_merge <- apply(S_merge, 2, mean)
 ```
 
 ```{r}
+jpeg("figs/m4_postcheck.jpg", width = 350, height = 350)
 plot(NULL,xlim=c(-40,60),ylim=c(3,5),
      xlab="launch angle", ylab="exit speed")
 for(i in 1:50){
   lines(sample_angle, predicted_speed4[i,], lwd=1)
 }
-
 points(df_train2$vangle, log(130-mean_S_merge), col=4, cex=0.3, pch=20)
+dev.off()
 ```
 
 # Testing
@@ -581,7 +582,7 @@ his exit velocity
 ## First test case
 
 ```{r}
-df_test1 <- df[3001:6000,]
+df_test1 <- df[(N+1):(N+3000),]
 ```
 
 ```{r}
@@ -645,12 +646,14 @@ sprintf('The mean square error is %s', mse)
 
 
 ```{r}
+jpeg("figs/hitter393.jpg", width = 350, height = 350)
 plot(NULL, xlim=c(-40,60), ylim=c(3,4.5), 
      xlab="launch angle", ylab="exit velocity",
      main="performance of hitter #393")
 points(hitter_393$vangle[-S_missidx], log(130-hitter_393$speed[-S_missidx]), cex=0.7, pch=20)
 points(hitter_393$vangle[-S_missidx], mean_predicted_speed_393[-S_missidx], col=4, cex=1, pch=20)
 legend("bottomleft", c("observe", "predict"), col=c(1,4), bty='n', pch=20)
+dev.off()
 ```
 
 

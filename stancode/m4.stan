@@ -58,8 +58,8 @@ model{
   sigma_s ~ exponential(1);
   sigma_a ~ exponential(1);
   b0 ~ normal(0,25);
-  b1 ~ normal(0,10);
-  b2 ~ normal(0,10);
+  b1 ~ normal(0,1);
+  b2 ~ normal(0,1);
   a0 ~ normal(5.5,0.1);
   a1 ~ normal(-2,0.1);
   A_obs ~ normal(A_true, Da);
