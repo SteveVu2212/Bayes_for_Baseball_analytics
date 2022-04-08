@@ -33,8 +33,8 @@ bat after being struck. There are 5 hit types which are defined by the
 associated launch angle
 
 The ultimate goal of the project is to predict the average exit velocity
-for each batter in the following season. The project is written in Stan
-and implements a full Bayesian approach
+for each batter in the following season. The project implements a full 
+Bayesian approach in Stan, a probabilistic programming language
 
 ``` r
 path = '...'
@@ -68,7 +68,7 @@ sprintf('the percentage of missing value from system B is %s', round(mean(is.na(
 # Directed Acyclic Graph (DAG)
 
 The DAG bellow graphically pictures the causal connection between
-variables. Although the project is towards predictions, the DAG is very
+variables. Although the project is about predictions, the DAG is very
 important as it explicitly speaks of the theory behind the models.
 Therefore, we are able to revise and improve our model’s predictive
 performance. The direct arrow implies a causal relationship between two

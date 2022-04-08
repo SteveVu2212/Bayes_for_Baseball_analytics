@@ -92,6 +92,12 @@ However, every models that are built up in the following part perfectly work wit
 df_train1 <- df_complete[1:N,]
 ```
 
+
+```{r}
+plot(df_complete$vangle_A, df_complete$speed_A, cex=0.1, pch=20, col=4)
+```
+
+
 **Comparing two systems**
 
 ```{r}
@@ -498,9 +504,15 @@ plot(NULL,xlim=c(-40,60),ylim=c(3,5),
 for(i in 1:50){
   lines(sample_angle, predicted_speed3[i,], lwd=1)
 }
-points(df_train2$vangle, log(130-mean_S_merge), col=4, cex=0.3, pch=20)
+points(df_train2$vangle_A, log(130-mean_S_merge), col=4, cex=0.3, pch=20)
+points(df_train2$vangle_B, log(130-mean_S_merge), col=2, cex=0.3, pch=20)
 # dev.off()
 ```
+
+```{r}
+loess()
+```
+
 
 ## Models with measurement errors and Bayesian imputation
 
